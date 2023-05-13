@@ -6,11 +6,13 @@ from langchain.chat_models import ChatOpenAI
 from langchain.chains import LLMChain
 
 try:
-    from creds import openai_key
+    from creds import openai_key, the_password
     openai_api_key = openai_key  # Add your OpenAI API key here
 except:
     openai_api_key = st.secrets["openai_api_key"]  # Add your OpenAI API key here
+    the_password = st.secrets["the_password"]
 
+save_key = openai_api_key
 # Seed types
 seed_types = ["Random Word", "Control (No Seed)", "Random Number (Small)", "Random Number (Large)"]
 
@@ -116,6 +118,8 @@ def main():
         # Call the generate_output function and display the loading spinner
         with st.spinner("Generating..."):
             openai_api_key = api_key  # Set the OpenAI API key
+            if api_key == the_password:
+                openai_api_key = save_key
             try:
                 output = generate_output(prompt, prefix, seeds, openai_api_key)
             except: 
