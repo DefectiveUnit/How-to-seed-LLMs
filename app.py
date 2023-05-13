@@ -24,8 +24,6 @@ Faker.seed(42)
 word_seeds = [faker.word() for _ in range(10)]
 string_seeds = [faker.pystr(min_chars=15, max_chars=15) for _ in range(10)]
 
-#word_seeds = ["apple", "banana", "carrot", "dog", "elephant", "flower", "grape", "house", "island", "jungle"]
-
 def set_seed(seed_type, word_seeds, string_seeds):
     if seed_type == "Random Word":
         seeds = word_seeds
@@ -115,10 +113,10 @@ def main():
 
 
     # Preview prompt button
-    if st.button("Preview Prompt"):
-        combined_prompt = preview_prompt(prompt, prefix, seeds)
-        st.write("Combined Prompt:")
-        st.code(combined_prompt)
+    st.subheader("Preview Prompt")
+    combined_prompt = preview_prompt(prompt, prefix, seeds)
+    st.write("Combined Prompt:")
+    st.code(combined_prompt)
 
     # Generate button
     if st.button("Run LLM"):
