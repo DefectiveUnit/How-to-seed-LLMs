@@ -14,7 +14,7 @@ except:
 
 save_key = openai_api_key
 # Seed types
-seed_types = ["Random Word", "Control (No Seed)", "Random Number (Small)", "Random Number (Large)"]
+seed_types = ["Random Word", "Random Strings", "Control (No Seed)", "Random Number (Small)", "Random Number (Large)"]
 
 random.seed(42)
 number_seeds = range(10)
@@ -22,11 +22,15 @@ big_number_seeds = [random.randint(1000000000, 9999999999) for _ in range(10)]
 faker = Faker()
 Faker.seed(42)
 word_seeds = [faker.word() for _ in range(10)]
+string_seeds = [faker.pystr(min_chars=15, max_chars=15) for _ in range(10)]
+
 #word_seeds = ["apple", "banana", "carrot", "dog", "elephant", "flower", "grape", "house", "island", "jungle"]
 
-def set_seed(seed_type, word_seeds):
+def set_seed(seed_type, word_seeds, string_seeds):
     if seed_type == "Random Word":
         seeds = word_seeds
+    if seed_type == "Random Strings":
+        seeds = string_seeds
     elif seed_type == "Random Number (Small)":
         seeds = number_seeds
     elif seed_type == "Random Number (Large)":
@@ -91,6 +95,7 @@ def main():
     seed_value = st.sidebar.text_input("Enter a seed for Faker", value = 42)
     Faker.seed(int(seed_value))
     word_seeds = [faker.word() for _ in range(10)]
+    string_seeds = [faker.pystr(min_chars=15, max_chars=15) for _ in range(10)]
     st.sidebar.write(word_seeds)
 
     # Main content
@@ -99,7 +104,7 @@ def main():
     prefix = st.text_input("Prefix", value = "Your mood is: ")
     seed_type = st.selectbox("Seed Type", seed_types)
 
-    seeds = set_seed(seed_type, word_seeds)
+    seeds = set_seed(seed_type, word_seeds, string_seeds)
 
 
 
