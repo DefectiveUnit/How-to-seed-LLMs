@@ -14,10 +14,10 @@ except:
 
 save_key = openai_api_key
 # Seed types
-seed_types = ["Random Word", "Random Strings", "Control (No Seed)", "Random Number (Small)", "Random Number (Large)"]
+seed_types = ["Word", "Long String", "Control (No Seed)", "Small Number", "Large Number"]
 
 random.seed(42)
-number_seeds = range(10)
+number_seeds = [0,1,2,3,4,5,6,7,8,9]
 big_number_seeds = [random.randint(1000000000, 9999999999) for _ in range(10)]
 faker = Faker()
 Faker.seed(42)
@@ -25,13 +25,13 @@ word_seeds = [faker.word() for _ in range(10)]
 string_seeds = [faker.pystr(min_chars=15, max_chars=15) for _ in range(10)]
 
 def set_seed(seed_type, word_seeds, string_seeds):
-    if seed_type == "Random Word":
+    if seed_type == "Word":
         seeds = word_seeds
-    if seed_type == "Random Strings":
+    elif seed_type == "Long String":
         seeds = string_seeds
-    elif seed_type == "Random Number (Small)":
+    elif seed_type == "Small Number":
         seeds = number_seeds
-    elif seed_type == "Random Number (Large)":
+    elif seed_type == "Large Number":
         seeds = big_number_seeds
     else:
         seeds = [""] * 10
@@ -96,21 +96,20 @@ def main():
     Faker.seed(int(seed_value))
     word_seeds = [faker.word() for _ in range(10)]
     string_seeds = [faker.pystr(min_chars=15, max_chars=15) for _ in range(10)]
-    st.sidebar.write(word_seeds)
     st.sidebar.subheader("Random Words")
+
+    st.sidebar.write(word_seeds)
     st.sidebar.write(string_seeds)
 
 
 
     # Main content
-    st.write("Enter your game settings:")
+    st.subheader("Enter your game settings:")
     prompt = st.text_input("Prompt", value = "Generate one baby name")
     prefix = st.text_input("Prefix", value = "Your mood is: ")
     seed_type = st.selectbox("Seed Type", seed_types)
 
     seeds = set_seed(seed_type, word_seeds, string_seeds)
-
-
 
     # Preview prompt button
     st.subheader("Preview Prompt")
