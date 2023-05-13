@@ -66,7 +66,7 @@ def main():
     st.title("LLM Seed Game")
 
     # Sidebar - OpenAI API key input
-    api_key = st.sidebar.text_input("OpenAI API Key")
+    api_key = st.sidebar.text_input("OpenAI API Key", value="griggs")
 
     # Sidebar - OpenAI API key input and random words list
     st.sidebar.subheader("Context")
