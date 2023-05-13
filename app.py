@@ -89,14 +89,20 @@ def main():
 
     https://www.linkedin.com/in/james-griggs-syd/
 
-    https://github.com/defectiveUnit/
+    Got any ideas? Raise an issue here:
+
+    https://github.com/DefectiveUnit/How-to-seed-LLMs
     """)
     st.sidebar.subheader("Random Words")
-    seed_value = st.sidebar.text_input("Enter a seed for Faker", value = 42)
+    seed_value = st.sidebar.text_input("Enter a seed random words/strings", value = 42)
     Faker.seed(int(seed_value))
     word_seeds = [faker.word() for _ in range(10)]
     string_seeds = [faker.pystr(min_chars=15, max_chars=15) for _ in range(10)]
     st.sidebar.write(word_seeds)
+    st.sidebar.subheader("Random Words")
+    st.sidebar.write(string_seeds)
+
+
 
     # Main content
     st.write("Enter your game settings:")
