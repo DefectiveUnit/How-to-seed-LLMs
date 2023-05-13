@@ -1,0 +1,7 @@
+creds.py
+*.pdf
+*.faiss
+*.pkl
+*.docx
+*.pyc
+*.bin
