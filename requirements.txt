@@ -1,5 +1,4 @@
 langchain
 openai
 faker
-random
 streamlit

@@ -4,11 +4,12 @@ from faker import Faker
 from langchain import PromptTemplate
 from langchain.chat_models import ChatOpenAI
 from langchain.chains import LLMChain
-from creds import openai_key
 
-
-# Set your OpenAI API key
-openai_api_key = openai_key  # Add your OpenAI API key here
+try:
+    from creds import openai_key
+    openai_api_key = openai_key  # Add your OpenAI API key here
+except:
+    openai_api_key = st.secrets["openai_api_key"]  # Add your OpenAI API key here
 
 # Seed types
 seed_types = ["Random Word", "Control (No Seed)", "Random Number (Small)", "Random Number (Large)"]
