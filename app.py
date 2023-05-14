@@ -37,6 +37,19 @@ def set_seed(seed_type, word_seeds, string_seeds):
         seeds = [""] * 10
     return seeds
 
+def set_long_seed(seed_type, nseeds=100):
+    if seed_type == "Word":
+        seeds = [faker.word() for _ in range(nseeds)]
+    elif seed_type == "Long String":
+        seeds = [faker.pystr(min_chars=15, max_chars=15) for _ in range(nseeds)]
+    elif seed_type == "Small Number":
+        seeds = [i for i in range(nseeds)]
+    elif seed_type == "Large Number":
+        seeds = [random.randint(1000000000, 9999999999) for _ in range(nseeds)]
+    else:
+        seeds = [""] * nseeds
+    return seeds
+
 prompt_template = PromptTemplate(
     input_variables=["seed", "prefix", "prompt"],
     template="""
@@ -111,11 +124,24 @@ def main():
 
     seeds = set_seed(seed_type, word_seeds, string_seeds)
 
+    if 'score' not in st.session_state:
+        st.session_state.score = 0
+
+    if 'combined_prompt' not in st.session_state:
+        st.session_state.combined_prompt = ""
+
+
     # Preview prompt button
     st.subheader("Preview Prompt")
     combined_prompt = preview_prompt(prompt, prefix, seeds)
+    if st.session_state.combined_prompt != combined_prompt:
+        st.session_state.score = 0
+    st.session_state.combined_prompt = combined_prompt
     st.write("Combined Prompt:")
     st.code(combined_prompt)
+
+    if 'score' not in st.session_state:
+        st.session_state.score = 0
 
     # Generate button
     if st.button("Run LLM"):
@@ -136,9 +162,29 @@ def main():
         st.success("Generated successfully!")
         
         # Calculate the score based on the number of unique values in the output
-        score = len(set(output))
-        st.write("Your score:", score, " out of 10")
+        st.session_state.score = len(set(output))
+        st.write("Your score:", st.session_state.score, " out of 10")
         st.write("Output:")
         st.write(output)
+    
+
+    # Display the new button if the score is 10/10
+    if st.session_state.score == 10:
+        st.subheader("You passed level 1 - try level 2!")
+        if st.button("Run LLM (100 words/numbers)"):
+            random_seeds = set_long_seed(seed_type=seed_type, nseeds=100)
+
+            with st.spinner("Generating 100 seeds, be patient..."):
+                openai_api_key = api_key  # Set the OpenAI API key
+                if api_key == the_password:
+                    openai_api_key = save_key
+                    try:
+                        output_100 = generate_output(prompt, prefix, random_seeds, openai_api_key)
+                    except: 
+                        return st.error("Error: Invalid API key (probably)")
+                score = len(set(output_100))
+                st.write("Your score:", score, " out of 100")
+                st.write("Output (100 words/numbers):")
+                st.write(output_100)
 
 main()
